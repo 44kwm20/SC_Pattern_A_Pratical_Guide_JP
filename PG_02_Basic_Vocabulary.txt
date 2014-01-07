@@ -5,17 +5,17 @@
 ////////////////////////////////////////////////
 Pseq(list, repeats, offset): 
 
-	list�S�̂�repeats��J��Ԃ��B
+	list全体をrepeats回繰り返す。
 	
-	��
+	例
 	Pseq([1,2,3],10).asStream.all;
 
 ////////////////////////////////////////////////
 Prand(list, repeats): 
 
-	list�̊e�A�C�e�����烉���_����repeats�Ԃ��B
+	listの各アイテムからランダムにrepeats個返す。
 
-	��
+	例
 	Prand([1,2,3],10).asStream.all;
 
 ////////////////////////////////////////////////
@@ -23,79 +23,79 @@ Pxrand(list, repeats):
 
 	Choose randomly, but never repeat the same item twice.
 
-	list�̊e�v�f���烉���_����repeats�Ԃ��B�����������A�C�e���͑����Ă͑I�΂�Ȃ��B
+	listの各要素からランダムにrepeats個返す。ただし同じアイテムは続けては選ばれない。
 	
-	��
+	例
 	Pxrand([1,2,3],10).asStream.all;
 
 ////////////////////////////////////////////////
 Pshuf(list, repeats): 
 
-	list�̃A�C�e�������V���b�t������A���̃V���b�t�����ꂽ���Ԃ�repeats��J��Ԃ��B
+	listのアイテムが一回シャッフルされ、そのシャッフルされた順番でrepeats回繰り返す。
 
-	��
+	例
 	Pshuf([1,2,3],10).asStream.all;
 
 ////////////////////////////////////////////////
 Pwrand(list, weights, repeats):
 
-	list�̊e�A�C�e�����A�Ή�����weigths�̏d�݂ɂ���ă����_���ɑI�΂��B
+	listの各アイテムが、対応したweigthsの重みによってランダムに選ばれる。
 
-	��
+	例
 	Pwrand([1,2,3],[4,1,1].normalizeSum, 20).asStream.all;
 
 ////////////////////////////////////////////////
 Pseries(start, step, length): 
 
-	start�̒l����setp�����Z���Alength�Ԃ��B
+	startの値からsetpずつ加算し、length個返す。
 
-	��
+	例
 	Pseries(1,2,10).asStream.all;
 
 ////////////////////////////////////////////////
 Pgeom(start, grow, length): 
 
-	start�̒l��setp�̒l�ŏ�Z�A���̌��ʂ��X��step�ŏ�Z...���J��Ԃ��Alength�Ԃ��B
+	startの値をsetpの値で乗算、その結果を更にstepで乗算...を繰り返し、length個返す。
 
-	��
+	例
 	Pgeom(1,2,10).asStream.all;
 
 ////////////////////////////////////////////////	
 Pwhite(lo, hi, length): 
 
-	lo��hi�̊Ԃ��烉���_���Ȓl��Ԃ��B
-	lo�Ahi���ɐ������ƕԂ�l�������A�ǂ��炩�ł��������ƕԂ�l�͎����B
+	loとhiの間からランダムな値を返す。
+	lo、hi共に整数だと返る値も整数、どちらかでも実数だと返る値は実数。
 
-	��
+	例
 	Pwhite(1,10,10).asStream.all;
 	Pwhite(1.0,10,10).asStream.all;
 
 ////////////////////////////////////////////////
 Pexprand(lo, hi, length): 
 
-	lo��hi�̊Ԃ��烉���_���Ȓl��Ԃ����A�w�����z�B���g���Ƃ��̒l�Ɏg������B
+	loとhiの間からランダムな値を返すが、指数分布。周波数とかの値に使えたり。
 
-	��
+	例
 	Pexprand(1,10,10).asStream.all;
 
 ////////////////////////////////////////////////
 Pbrown(lo, hi, step, length): 
 
-	�u���E���^���A�Ƃ����̂ɑ����āAlo��hi�̊Ԃ��烉���_���Ȓl��Ԃ��BDrunk�n?
-	�ω��ʂ�step�Őݒ�A�ȑO�̒l�ɑ����Ă����B
-	�Ⴆ��setp��2�ɂ���ƕω��ʂ́u-2����2�܂Łv�Ƃ������ɂȂ�炵���B
+	ブラウン運動、というのに則って、loとhiの間からランダムな値を返す。Drunk系?
+	変化量をstepで設定、以前の値に足していく。
+	例えばsetpを2にすると変化量は「-2から2まで」という事になるらしい。
 
-	��
+	例
 	Pbrown(1,20,2,10).asStream.all;
 
 ////////////////////////////////////////////////	
 Pfunc(nextFunc, resetFunc): 
 
-	���[�U�[����`�����֐����p�^�[�����ł���B
-	nextFunc�͎��ɒl�����߂�ꂽ���ɕ]�������֐��B
-	resetFunc��reset���b�Z�[�W���󂯎�������ɕ]�������֐��B
+	ユーザーが定義した関数をパターン化できる。
+	nextFuncは次に値を求められた時に評価される関数。
+	resetFuncはresetメッセージを受け取った時に評価される関数。
 
-	��
+	例
 	a = Pfunc({[1, 2, 3, 6].choose},{"reset".postln}).asStream;
 	a.nextN(10).postln;
 	a.reset;
@@ -103,18 +103,18 @@ Pfunc(nextFunc, resetFunc):
 ////////////////////////////////////////////////
 Pfuncn(func, repeats): 
 
-	�֐��̒l��Ԃ����Arepeats�Ԃ����炻���Œ�~����B
+	関数の値を返すが、repeats個返したらそこで停止する。
 
-	��
+	例
 	a = Pfuncn({[1, 2, 3, 6].choose},4).asStream.all;
 
 ////////////////////////////////////////////////	
 Proutine(routineFunc): 
 
-	���[�`���̗l�Ȋ֐����d���߂�B.yield�������l���Ԃ����B.embedInStream�ł������炵���B
-	���[�`�����I�����Ԃ����̂��Ȃ��Ȃ�A��������.yiels��nil���Ԃ��Ă���ƁA�����Ńp�^�[���I���B
+	ルーチンの様な関数を仕込める。.yieldがついた値が返される。.embedInStreamでもいいらしい。
+	ルーチンが終了し返すものがなくなる、もしくは.yielsでnilが返ってくると、そこでパターン終了。
 
-	��
+	例
 	Prout( { loop { 1.yield; 2.yield; 7.yield; 10.do { 1.0.rand.yield }}} ).asStream.nextN(20);
 	Prout( { loop { 1.yield; 2.yield; 7.yield; 10.do { 1.0.rand.yield }; nil.yield }} ).asStream.all;
 	Prout( {10.do({arg i; i.yield }) }).asStream.all;
@@ -127,103 +127,103 @@ Proutine(routineFunc):
 ////////////////////////////////////////////////
 Pser(list, repeats, offset): 
 
-	list���̃A�C�e����repeats�J��Ԃ��B
+	list内のアイテムをrepeats個繰り返す。
 
-	��
+	例
 	Pser([1,2,3],10).asStream.all;
 
 ////////////////////////////////////////////////
 Pslide(list, repeats, len, step, start, wrapAtEnd): 
 
-	���X�g���̃A�C�e�����Z�O�����g�ɕ����A�J��Ԃ��B
-	repeats :  �Z�O�����g���J��Ԃ���
-	len : 1�̃Z�O�����g�̒���
-	step : ���Ɉڂ�ہA�Z�O�����g�̊J�n�ʒu���ǂꂾ�����炷��
-	start : ��ԍŏ��̊J�n�n�_
-	wrapAtEnd : �J��Ԃ��̌��ʃ��X�g�̖��[�ɓ��B�����ہA���X�g�̖`������J��Ԃ����ǂ���
+	リスト内のアイテムをセグメントに分け、繰り返す。
+	repeats :  セグメントを繰り返す回数
+	len : 1個のセグメントの長さ
+	step : 次に移る際、セグメントの開始位置をどれだけずらすか
+	start : 一番最初の開始地点
+	wrapAtEnd : 繰り返しの結果リストの末端に到達した際、リストの冒頭から繰り返すかどうか
 	
-	��
+	例
 	Pslide(#[1, 2, 3, 4, 5, 6, 7, 8], 10, 3, 2, 0, true).asStream.all;
-	->	����Ă鎖��1����8�̃��X�g��3���̃Z�O�����g�ɕ����A10��J��Ԃ��B
-		�J��Ԃ��ہA�P�񖈂ɃZ�O�����g�J�n�ʒu��2�����炷�B
-		�X�^�[�g�n�_��0�ڂ̃A�C�e���ŁA���[�ɓ��B�����烊�X�g�̖`������J��Ԃ��B
+	->	やってる事は1から8のリストを3つ毎のセグメントに分け、10回繰り返す。
+		繰り返す際、１回毎にセグメント開始位置を2つずつずらす。
+		スタート地点は0個目のアイテムで、末端に到達したらリストの冒頭から繰り返す。
 	
-	���� -> [ 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 1, 1, 2, 3, 3, 4, 5 ]
+	結果 -> [ 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 1, 1, 2, 3, 3, 4, 5 ]
 
 ////////////////////////////////////////////////
 Pwalk(list, stepPattern, directionPattern, startPos): 
 
-	���X�g���̃A�C�e����stepPattern, directionPattern�ɏ]���ĕԂ��Ă����B
-	stepPattern : ���ɒl��Ԃ��ہA���X�g���C���f�b�N�X���ǂꂾ���ړ����邩
-	directionPattern : ���X�g���[�ɓ��B�����ہAstepPattern���ǂ̕����ɐi��ł��������w��
-		�悭����g�����Ƃ���...
-		 1 ... ���X�g�̖��[�ɓ��B������A���X�g�̖`������ĊJ�B
-		 Pseq([1,-1],inf) ... �܂����X�g�̖`�����珇�ɐi�s���A���[�ɓ��B������܂�Ԃ��t�ɐi�s����B
-	startPos : ��ԍŏ��̊J�n�n�_
+	リスト内のアイテムをstepPattern, directionPatternに従って返していく。
+	stepPattern : 次に値を返す際、リスト内インデックスをどれだけ移動するか
+	directionPattern : リスト末端に到達した際、stepPatternがどの方向に進んでいくかを指定
+		よくある使い方として...
+		 1 ... リストの末端に到達したら、リストの冒頭から再開。
+		 Pseq([1,-1],inf) ... まずリストの冒頭から順に進行し、末端に到達したら折り返し逆に進行する。
+	startPos : 一番最初の開始地点
 
-	��
+	例
 	Pwalk( (1..10),  1, Pseq([1,-1],inf) ).asStream.nextN(20);
-	->	1����10�̃��X�g��`�����珇�ɕԂ��B���[�ɓ��B������t�ɒH���Ă����B
-	���� -> [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 2 ]
+	->	1から10のリストを冒頭から順に返す。末端に到達したら逆に辿っていく。
+	結果 -> [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 2 ]
 
 	Pwalk( (1..10),  Pwhite(-2,2,inf), Pseq([1,-1],inf), 4 ).asStream.nextN(20);
-	->	1����10�̃��X�g��5����J�n���A-2����2�܂ł̃����_���Ȓl�ŃC���f�b�N�X���ړ��B
-	���ʗ� -> [ 5, 7, 7, 6, 7, 7, 5, 4, 4, 6, 6, 6, 4, 3, 3, 2, 1, 10, 9, 7 ]
+	->	1から10のリストを5から開始し、-2から2までのランダムな値でインデックスを移動。
+	結果例 -> [ 5, 7, 7, 6, 7, 7, 5, 4, 4, 6, 6, 6, 4, 3, 3, 2, 1, 10, 9, 7 ]
 
-	directionPattern��1,-1�ȊO�ł��A3�ȏ�ł�ok�B
+	directionPatternは1,-1以外でも、3つ以上でもok。
 	
 	Pwalk( (1..10),  1, Pseq([2,-1],inf) ).asStream.nextN(20);
-	���� -> [ 1, 3, 5, 7, 9, 7, 6, 5, 4, 3, 2, 1, 2, 4, 6, 8, 10, 8, 7, 6 ]
+	結果 -> [ 1, 3, 5, 7, 9, 7, 6, 5, 4, 3, 2, 1, 2, 4, 6, 8, 10, 8, 7, 6 ]
 
 	Pwalk( (1..10),  1, Pseq([1,-1,4],inf) ,8).asStream.nextN(20);
-	���� -> [ 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 2, 6, 10, 4, 5, 6, 7, 8, 9 ]
+	結果 -> [ 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 2, 6, 10, 4, 5, 6, 7, 8, 9 ]
 
 ////////////////////////////////////////////////	
 Place(list, repeats, offset): 
 
-	�e���X�g�̒��g�����Ԃɓǂ�ł����B
-	1��ڂ̃��[�v�͊e���X�g��1�Ԗڂ��A2��ڂ͊e���X�g��2�Ԗڂ�ǂށA�Ƃ����������B
+	各リストの中身を順番に読んでいく。
+	1回目のループは各リストの1番目を、2回目は各リストの2番目を読む、といった感じ。
 	
-	��
+	例
 	Place([0, [1, 2], [3, 4, 5]], 3).asStream.all;
 	
-		�E�ŏ��̃��X�g��0�Ȃ̂ł�����0
-		�E���̃��X�g��1,2�Ȃ̂ŁA�P��ڂ̃��[�v�ł�1�A2��ڂ̃��[�v�ł�2
-		�E���̃��X�g�͂P��ڂ̃��[�v�ł�3�A2��ڂ̃��[�v�ł�4�A3��ڂ̃��[�v�ł�5
-		�����̃��X�g�����ԂɕԂ��Ă����B
-		�܂�A1��ڂ̃��[�v�ł�0,1,3�A2��ڂ̃��[�v�ł�0,2,4...
-		����-> [ 0, 1, 3, 0, 2, 4, 0, 1, 5 ]
+		・最初のリストは0なのでずっと0
+		・次のリストは1,2なので、１回目のループでは1、2回目のループでは2
+		・次のリストは１回目のループでは3、2回目のループでは4、3回目のループでは5
+		これらのリストを順番に返していく。
+		つまり、1回目のループでは0,1,3、2回目のループでは0,2,4...
+		結果-> [ 0, 1, 3, 0, 2, 4, 0, 1, 5 ]
 
 ////////////////////////////////////////////////
 Ppatlace(list, repeats, offset): 
 
-	�e�p�^�[���̒��g�����Ԃɓǂ�ł����B
+	各パターンの中身を順番に読んでいく。
 	
-	��
+	例
 	Ppatlace([Pseries(0, 1, 7),Pseries(100, -1, 7)], 10).asStream.all;
 	
-		�E�ŏ��̃p�^�[����0,1,2...�ƕԂ��p�^�[��
-		�E�ŏ��̃p�^�[����100,99,98,97...�ƕԂ��p�^�[��
-		�����̃p�^�[�����@���ԂɕԂ��Ă����B
-		�܂�A1��ڂ̃��[�v�ł�0,100�A2��ڂ̃��[�v�ł�1,99...
-		����-> [ 0, 100, 1, 99, 2, 98, 3, 97, 4, 96, 5, 95, 6, 94 ]
+		・最初のパターンは0,1,2...と返すパターン
+		・最初のパターンは100,99,98,97...と返すパターン
+		これらのパターンを　順番に返していく。
+		つまり、1回目のループでは0,100、2回目のループでは1,99...
+		結果-> [ 0, 100, 1, 99, 2, 98, 3, 97, 4, 96, 5, 95, 6, 94 ]
 
-// Place��Ppatlace�̈Ⴂ�B
+// PlaceとPpatlaceの違い。
 
-���X�g����ꂽ�ꍇ...
+リストを入れた場合...
 Place(#[1, [2,5], [3, 6]], 10) .asStream.all;
 Ppatlace(#[1, [2,5], [3, 6]], 10) .asStream.all;
 
-�p�^�[������ꂽ�ꍇ...
+パターンを入れた場合...
 Place([Pseries(0, 1, 8),Pseries(100, -1, 7)], 10).asStream.all;
 Ppatlace([Pseries(0, 1, 8),Pseries(100, -1, 7)], 10).asStream.all;
 
 ////////////////////////////////////////////////
 Ptuple(list, repeats): 
 
-	Ppatlace�Ǝ��Ă��邪�A�e���[�v���ɓ���ꂽ�A�C�e������̃��X�g�ɓZ�߂ĕԂ��B
+	Ppatlaceと似ているが、各ループ毎に得られたアイテムを一つのリストに纏めて返す。
 
-	��
+	例
 	(
 	 Ptuple([
 	 		Pseries(7, -1, 8),
@@ -232,10 +232,10 @@ Ptuple(list, repeats):
 		], 1).asStream.all
 	)
 
-	�ŏ��̃p�^�[����7�A���̃p�^�[����9�A���̎���4�B�������Z�߂ɂ���[7,9,4]�̃��X�g�ɁB
-	���̃��[�v�ł͍ŏ��̃p�^�[����6�A���̃p�^�[����7�A���̎�����4��[6,7,4]
-	...�Ƃ�������B
-	����->[ [ 7, 9, 4 ], [ 6, 7, 4 ], [ 5, 7, 4 ], [ 4, 7, 2 ], [ 3, 4, 2 ], [ 2, 4, 0 ], [ 1, 2, 0 ], [ 0, 2, -3 ] ]
+	最初のパターンは7、次のパターンは9、その次は4。これを一纏めにして[7,9,4]のリストに。
+	次のループでは最初のパターンが6、次のパターンが7、その次あが4で[6,7,4]
+	...といった具合。
+	結果->[ [ 7, 9, 4 ], [ 6, 7, 4 ], [ 5, 7, 4 ], [ 4, 7, 2 ], [ 3, 4, 2 ], [ 2, 4, 0 ], [ 1, 2, 0 ], [ 0, 2, -3 ] ]
 
 ////////////////////////////////////////////////
 // Additional Random Number Generators
@@ -244,98 +244,98 @@ Ptuple(list, repeats):
 ////////////////////////////////////////////////
 Pgbrown(lo, hi, step, length): 
 
-	�u���E���^���A�Ƃ����̂ɑ����āAlo��hi�̊Ԃ��烉���_���Ȓl��Ԃ��BDrunk�n?
-	�ω��ʂ�step�Őݒ�A�􉽋����I�ɕω�����A�炵���B
-	�Ⴆ��setp��2�ɂ���ƕω��ʂ́u-2����2�܂Łv�Ƃ������ɂȂ�炵���B
+	ブラウン運動、というのに則って、loとhiの間からランダムな値を返す。Drunk系?
+	変化量をstepで設定、幾何級数的に変化する、らしい。
+	例えばsetpを2にすると変化量は「-2から2まで」という事になるらしい。
 
-	��
+	例
 	Pgbrown(1,200,0.0001,10).asStream.all;
 
 ////////////////////////////////////////////////
 Pbeta(lo, hi, prob1, prob2, length): 
 	
-	�u�x�[�^���z�v�Ƃ����̂ɑ����Ēl��Ԃ��A�炵���B
-	prob1����(alpha)��prob2���� (beta)�B�����̐ݒ�ŕ��z���ς��B
+	「ベータ分布」というのに則って値を返す、らしい。
+	prob1がα(alpha)でprob2がβ (beta)。これらの設定で分布が変わる。
 	
-	��
-	lo�ɋ߂��l���o�₷���ݒ�
+	例
+	loに近い値が出やすい設定
 	Pbeta(0, 10, 1, 3, inf).asStream.nextN(20);
 	
-	hi�ɋ߂��l���o�₷���ݒ�
+	hiに近い値が出やすい設定
 	Pbeta(0, 10, 5, 1, inf).asStream.nextN(20);
 	
-	lo��hi�ɋ߂��l���o�₷���ݒ�
+	loとhiに近い値が出やすい設定
 	Pbeta(0, 10, 0.5, 0.5, inf).asStream.nextN(20);
 	
-	�ȂǂȂ�...
-	http://ja.wikipedia.org/wiki/�x�[�^���z
+	などなど...
+	http://ja.wikipedia.org/wiki/ベータ分布
 
 ////////////////////////////////////////////////
 Pcauchy(mean, spread, length): 
 
-	�u�R�[�V�[���z�v�Ƃ����̂ɑ����Ēl��Ԃ��A�炵���B
-	mean : ���z�̒��S����
-	spread : ���ꂪ�������قǒ��S�ߕӂɕ��z���W������
-	���ʁAmean�𒆐S�ɂ����x���J�[�u���ۂ����z�ɂȂ�A�̂�?
+	「コーシー分布」というのに則って値を返す、らしい。
+	mean : 分布の中心部分
+	spread : これが小さいほど中心近辺に分布が集中する
+	結果、meanを中心にしたベルカーブっぽい分布になる、のか?
 
-	��
+	例
 	Pcauchy(100,0.2, inf).asStream.nextN(20);
 	
-	http://ja.wikipedia.org/wiki/�R�[�V�[���z
+	http://ja.wikipedia.org/wiki/コーシー分布
 
 ////////////////////////////////////////////////
 Pgauss(mean, dev, length): 
 
-	�u���K���z�v�܂��́u�K�E�X���z�v�Ƃ����̂ɑ����Ēl��Ԃ��A�炵���B
-	mean : ���z�̒��S����
-	dev : ���ꂪ�������قǒ��S�ߕӂɕ��z���W������
-	���ʁAmean�𒆐S�ɂ����x���J�[�u���ۂ����z�ɂȂ�A�̂�?
-	�u�R�[�V�[���z�v�Ƃ̈Ⴂ��?
+	「正規分布」または「ガウス分布」というのに則って値を返す、らしい。
+	mean : 分布の中心部分
+	dev : これが小さいほど中心近辺に分布が集中する
+	結果、meanを中心にしたベルカーブっぽい分布になる、のか?
+	「コーシー分布」との違いは?
 
-	��
+	例
 	Pgauss(100,0.2, inf).asStream.nextN(20);
 	
-	http://ja.wikipedia.org/wiki/���K���z
+	http://ja.wikipedia.org/wiki/正規分布
 	
 ////////////////////////////////////////////////
 Phprand(lo, hi, length): 
 
-	hi�ɕ΂肪���ȃ����_��?
+	hiに偏りがちなランダム?
 
-	��
+	例
 	Phprand(0,100, inf).asStream.nextN(20);
 
 ////////////////////////////////////////////////
 Plprand(lo, hi, length): 
 
-	lo�ɕ΂肪���ȃ����_��?
+	loに偏りがちなランダム?
 
-	��
+	例
 	Plprand(0,100, inf).asStream.nextN(20);
 	
 ////////////////////////////////////////////////
 Pmeanrand(lo, hi, length): 
 
-	lo��hi�̒��Ԃɕ΂肪���ȃ����_��?
+	loとhiの中間に偏りがちなランダム?
 
-	��
+	例
 	Pmeanrand(0,100, inf).asStream.nextN(20);
 
 ////////////////////////////////////////////////
 Ppoisson(mean, length): 
 
-	�u�|�A�\�����z�v�Ƃ����̂ɑ����Ēl��Ԃ��A�炵���B
-	mean�ɕ΂肪���ȃ����_��?
-	mean��0�ɋ߂��ق�mean�̒l�ߕӂɏW�����₷��?
+	「ポアソン分布」というのに則って値を返す、らしい。
+	meanに偏りがちなランダム?
+	meanが0に近いほどmeanの値近辺に集中しやすい?
 
-	��
+	例
 	Ppoisson(1, inf).asStream.nextN(20);
 
 ////////////////////////////////////////////////
 Pprob(distribution, lo, hi, length, tableSize): 
 
-	������Ȃ��ł�...
+	分からないです...
 
-	��
+	例
 	Pprob([0,0,0,0,1,1,1,1,3,3,6,6,9]).asStream.nextN(800).sort.plot;
 	
